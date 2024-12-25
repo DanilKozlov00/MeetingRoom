@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MeetingRoom</string>
+    <string name="accessibility_service_description">Test</string>
+</resources>
