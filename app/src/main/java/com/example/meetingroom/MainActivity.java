@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchApp() {
         LogManager.getInstance().addLog("Попытка запустить sber jazz");
-        String url = "https://salutejazz.ru/calls/in0sec?psw=OBgWD0RREwQNCBEZG0UEFwICDA";
+        String url = "https://salutejazz.ru";
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         startActivity(intent);
