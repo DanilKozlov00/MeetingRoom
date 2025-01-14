@@ -7,18 +7,23 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -29,6 +34,8 @@ public class BackgroundServerService extends Service {
     private static final String CHANNEL_ID = "ServerChannel";
     private ServerSocket serverSocket;
 
+    private LinkService linkService;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -38,7 +45,9 @@ public class BackgroundServerService extends Service {
                 .setContentText("Server is running")
                 .setSmallIcon(android.R.drawable.ic_menu_info_details)
                 .build());
+        linkService = new LinkService(this);
         startServer();
+
     }
 
     @Override
@@ -96,6 +105,10 @@ public class BackgroundServerService extends Service {
                     Map<String, String> params = parseQueryString(queryString);
                     if (params.containsKey("url")) {
                         launchApp(params.get("url"));
+                        response = "OK";
+                    }else  if (params.containsKey("call")) {
+                        linkService.addLink(params.get("call"), params.get("desc"));
+                        MainActivity.STATIC_APP.addButton(params.get("desc"), "https://salutejazz.ru/#/calls/"+params.get("call"));
                         response = "OK";
                     }
                 }
@@ -157,10 +170,70 @@ public class BackgroundServerService extends Service {
     }
 
     private void launchApp(String url) {
-        LogManager.getInstance().addLog("Попытка запустить sber jazz");
+        LogManager.getInstance().addLog("Попытка запустить url");
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
+
+
+//    public void saveText(String url, String description){
+//
+//        FileOutputStream fos = null;
+//        try {
+//
+//            String text = openText();
+//            String text2 = description!=null? description+" [https://salutejazz.ru/#/calls/"+url+"]\n": "SberJazz [https://salutejazz.ru/#/calls/"+url+"]\n";
+//            text+=text2;
+//
+//
+//            fos = openFileOutput("links.txt", MODE_PRIVATE);
+//            fos.write(text.getBytes());
+//
+//        }
+//        catch(IOException ex) {
+//
+//            LogManager.getInstance().addLog("Ошибка записи файла:"+ex.getMessage());
+//        }
+//        finally{
+//            try{
+//                if(fos!=null)
+//                    fos.close();
+//            }
+//            catch(IOException ex){
+//                LogManager.getInstance().addLog("Ошибка закрытия файла:"+ex.getMessage());
+//
+//            }
+//        }
+//    }
+//
+//
+//    public String openText(){
+//
+//        FileInputStream fin = null;
+//        try {
+//            fin = openFileInput("links.txt");
+//            byte[] bytes = new byte[fin.available()];
+//            fin.read(bytes);
+//            String text = new String (bytes);
+//            LogManager.getInstance().addLog(text);
+//            return text;
+//        }
+//        catch(IOException ex) {
+//            LogManager.getInstance().addLog("Ошибка чтения файла:"+ex.getMessage());
+//        }
+//        finally{
+//            try{
+//                if(fin!=null)
+//                    fin.close();
+//            }
+//            catch(IOException ex){
+//                LogManager.getInstance().addLog("Ошибка закрытия файла:"+ex.getMessage());
+//            }
+//        }
+//        return null;
+//    }
+
 }

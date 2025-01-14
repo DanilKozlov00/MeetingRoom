@@ -1,25 +1,43 @@
 
 package com.example.meetingroom;
 
+import static android.view.View.INVISIBLE;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
+import java.util.StringTokenizer;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView logTextView;
 
+    public static MainActivity STATIC_APP;
+
+    private LinkService linkService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        linkService = new LinkService(this);
         setContentView(R.layout.activity_logs);
 
         logTextView = findViewById(R.id.logTextView);
@@ -42,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(serviceIntent);
         }
+
+        TableLayout table = findViewById(R.id.BtnTable);
+        addButtons(table);
+
+        STATIC_APP = this;
+
     }
 
     // Метод для добавления логов
@@ -61,5 +85,40 @@ public class MainActivity extends AppCompatActivity {
         intent.setData(Uri.parse(url));
         startActivity(intent);
     }
+
+    private void addButtons(TableLayout tl) {
+
+       ArrayList<Link> linkList = linkService.readLinks();
+        for (Link link: linkList) {
+            TableRow tr = new TableRow(this);
+            Button btn = new Button(this);
+            btn.setText(link.getName());
+            btn.setOnClickListener(l -> onBtnClick(link.getUrl()));
+            tr.addView(btn);
+            tl.addView(tr);
+        }
+    }
+
+    protected void addButton(String name, String url) {
+
+//            TableRow tr = new TableRow(this);
+//            Button btn = new Button(this);
+//            btn.setText(name);
+//            btn.setOnClickListener(l->onBtnClick(url));
+//            tr.addView(btn);
+//
+//            TableLayout table = findViewById(R.id.BtnTable);
+//            table.addView(tr);
+
+        this.recreate();
+    }
+
+    private void onBtnClick(String url) {
+        LogManager.getInstance().addLog("launch " + url);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
+    }
+
 }
 
