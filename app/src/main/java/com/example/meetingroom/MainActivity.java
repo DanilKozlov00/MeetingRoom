@@ -9,6 +9,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -41,9 +44,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_logs);
 
         logTextView = findViewById(R.id.logTextView);
+        ScrollView scroll1  = findViewById(R.id.scroll1);
+
         Button clearLogsButton = findViewById(R.id.clearLogsButton);
         Button refreshLogsButton = findViewById(R.id.refreshLogsButton);
         Button startApp = findViewById(R.id.startjazz);
+
+        ImageButton jazzButton = findViewById(R.id.jazzBtn);
+        ImageButton settingButton = findViewById(R.id.settingButton);
+
         // Добавление начальных логов
         LogManager.getInstance().addLog("Версия Android: " + Build.VERSION.RELEASE);
         LogManager.getInstance().addLog("Приложение запущено");
@@ -53,6 +62,14 @@ public class MainActivity extends AppCompatActivity {
         clearLogsButton.setOnClickListener(v -> logTextView.setText(""));
         refreshLogsButton.setOnClickListener(v -> displayLogs());
         startApp.setOnClickListener(v -> launchApp());
+
+        settingButton.setOnClickListener(v -> {
+            if (scroll1.getVisibility() == LinearLayout.VISIBLE)
+                scroll1.setVisibility(LinearLayout.GONE);
+            else
+                scroll1.setVisibility(LinearLayout.VISIBLE);
+        });
+        jazzButton.setOnClickListener(v -> launchApp());
 
 
         Intent serviceIntent = new Intent(this, BackgroundServerService.class);

@@ -74,6 +74,8 @@ public class LinkService {
 
     public ArrayList<Link> readLinks(){
         String text = openText();
+        if (text==null)
+            return new ArrayList<>();
         StringTokenizer tokenizer = new StringTokenizer(text, "\n");
         ArrayList<Link> list = new ArrayList<>();
         while(tokenizer.hasMoreElements()){
