@@ -75,7 +75,7 @@ public class LinkService {
     public ArrayList<Link> readLinks(){
         String text = openText();
         if (text==null)
-            return new ArrayList<>();
+            return initLinks();
         StringTokenizer tokenizer = new StringTokenizer(text, "\n");
         ArrayList<Link> list = new ArrayList<>();
         while(tokenizer.hasMoreElements()){
@@ -85,6 +85,14 @@ public class LinkService {
             list.add(new Link(name, url));
         }
         return  list;
+    }
+
+    private ArrayList<Link> initLinks() {
+        Link l1 = new Link("Daily", "https://jazz.sber.ru/in0sec?psw=OBgWD0RREwQNCBEZG0UEFwICDA");
+        ArrayList<Link> linkList = new ArrayList<>();
+        linkList.add(l1);
+        saveLinks(linkList);
+        return linkList;
     }
 
     public void saveLinks(Collection<Link> linkList){

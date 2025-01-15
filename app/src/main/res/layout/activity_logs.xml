@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:paddingBottom="8dp"
-            android:text="Application Logs"
+            android:text="Избранные ссылки"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -36,53 +36,64 @@
             app:srcCompat="@drawable/settings20" />
     </LinearLayout>
 
-    <ScrollView
-        android:id="@+id/scroll1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#F0F0F0"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/logTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="4dp"
-            android:padding="8dp"
-            android:textSize="14sp" />
-    </ScrollView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/refreshLogsButton"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:drawableLeft="@drawable/reload20"
-            android:text="Refresh Logs" />
-
-        <Button
-            android:id="@+id/clearLogsButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:drawableLeft="@drawable/broom20"
-            android:text="Clear Logs" />
-
-
-    </LinearLayout>
-
     <TableLayout
         android:id="@+id/BtnTable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/settingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/scroll1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#F0F0F0"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/logTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="4dp"
+                android:padding="8dp"
+                android:textSize="14sp" />
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/refreshLogsButton"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/reload20"
+                android:text="Refresh Logs" />
+
+            <Button
+                android:id="@+id/clearLogsButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/broom20"
+                android:text="Clear Logs" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
 </LinearLayout>

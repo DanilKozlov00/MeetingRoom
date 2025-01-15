@@ -4,12 +4,14 @@ package com.example.meetingroom;
 import static android.view.View.INVISIBLE;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -18,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.core.content.ContextCompat;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,11 +48,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_logs);
 
         logTextView = findViewById(R.id.logTextView);
-        ScrollView scroll1  = findViewById(R.id.scroll1);
-
+        LinearLayout settingLayout =  findViewById(R.id.settingLayout);
+        settingLayout.setVisibility(LinearLayout.GONE);
         Button clearLogsButton = findViewById(R.id.clearLogsButton);
         Button refreshLogsButton = findViewById(R.id.refreshLogsButton);
-        Button startApp = findViewById(R.id.startjazz);
+        //Button startApp = findViewById(R.id.startjazz);
 
         ImageButton jazzButton = findViewById(R.id.jazzBtn);
         ImageButton settingButton = findViewById(R.id.settingButton);
@@ -61,13 +65,13 @@ public class MainActivity extends AppCompatActivity {
         // Очистка логов по кнопке
         clearLogsButton.setOnClickListener(v -> logTextView.setText(""));
         refreshLogsButton.setOnClickListener(v -> displayLogs());
-        startApp.setOnClickListener(v -> launchApp());
+        //startApp.setOnClickListener(v -> launchApp());
 
         settingButton.setOnClickListener(v -> {
-            if (scroll1.getVisibility() == LinearLayout.VISIBLE)
-                scroll1.setVisibility(LinearLayout.GONE);
+            if (settingLayout.getVisibility() == LinearLayout.VISIBLE)
+                settingLayout.setVisibility(LinearLayout.GONE);
             else
-                scroll1.setVisibility(LinearLayout.VISIBLE);
+                settingLayout.setVisibility(LinearLayout.VISIBLE);
         });
         jazzButton.setOnClickListener(v -> launchApp());
 
@@ -111,7 +115,19 @@ public class MainActivity extends AppCompatActivity {
             Button btn = new Button(this);
             btn.setText(link.getName());
             btn.setOnClickListener(l -> onBtnClick(link.getUrl()));
+
+//            btn.setCompoundDrawables(drawable, null,drawable,null);
+//            ImageView img = new ImageView(this);
+//            img.setImageDrawable(drawable);
+
+            Drawable drawable = ContextCompat.getDrawable(this,R.drawable.jazz30);
+            ImageButton imgBtn = new ImageButton(this);
+            imgBtn.setImageDrawable(drawable);
+            imgBtn.setOnClickListener(l -> onBtnClick(link.getUrl()));
+
+            tr.addView(imgBtn);
             tr.addView(btn);
+
             tl.addView(tr);
         }
     }
