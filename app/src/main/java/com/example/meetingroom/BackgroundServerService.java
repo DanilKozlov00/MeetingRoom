@@ -108,7 +108,10 @@ public class BackgroundServerService extends Service {
                         response = "OK";
                     }else  if (params.containsKey("call")) {
                         linkService.addLink(params.get("call"), params.get("desc"));
-                        MainActivity.STATIC_APP.addButton(params.get("desc"), "https://salutejazz.ru/#/calls/"+params.get("call"));
+                        //MainActivity.STATIC_APP.addButton(params.get("desc"), params.get("call"));
+                        response = "OK";
+                    }else  if (params.containsKey("delete")) {
+                        removeLink(params.get("delete"));
                         response = "OK";
                     }
                 }
@@ -118,12 +121,17 @@ public class BackgroundServerService extends Service {
                         "Content-Length: " + ("Server received: " + request).length() + "\r\n\r\n" +
                         "Server response: " + response;
                 out.println(htmlResponse);
+                out.flush();
 
                 clientSocket.close();
             } catch (Exception e) {
                 LogManager.getInstance().addLog(e.getMessage());
             }
         }).start();
+    }
+
+    private void removeLink(String name) {
+        linkService.removeLink(name);
     }
 
     private void createNotificationChannel() {
@@ -177,63 +185,5 @@ public class BackgroundServerService extends Service {
         startActivity(intent);
     }
 
-
-
-//    public void saveText(String url, String description){
-//
-//        FileOutputStream fos = null;
-//        try {
-//
-//            String text = openText();
-//            String text2 = description!=null? description+" [https://salutejazz.ru/#/calls/"+url+"]\n": "SberJazz [https://salutejazz.ru/#/calls/"+url+"]\n";
-//            text+=text2;
-//
-//
-//            fos = openFileOutput("links.txt", MODE_PRIVATE);
-//            fos.write(text.getBytes());
-//
-//        }
-//        catch(IOException ex) {
-//
-//            LogManager.getInstance().addLog("Ошибка записи файла:"+ex.getMessage());
-//        }
-//        finally{
-//            try{
-//                if(fos!=null)
-//                    fos.close();
-//            }
-//            catch(IOException ex){
-//                LogManager.getInstance().addLog("Ошибка закрытия файла:"+ex.getMessage());
-//
-//            }
-//        }
-//    }
-//
-//
-//    public String openText(){
-//
-//        FileInputStream fin = null;
-//        try {
-//            fin = openFileInput("links.txt");
-//            byte[] bytes = new byte[fin.available()];
-//            fin.read(bytes);
-//            String text = new String (bytes);
-//            LogManager.getInstance().addLog(text);
-//            return text;
-//        }
-//        catch(IOException ex) {
-//            LogManager.getInstance().addLog("Ошибка чтения файла:"+ex.getMessage());
-//        }
-//        finally{
-//            try{
-//                if(fin!=null)
-//                    fin.close();
-//            }
-//            catch(IOException ex){
-//                LogManager.getInstance().addLog("Ошибка закрытия файла:"+ex.getMessage());
-//            }
-//        }
-//        return null;
-//    }
 
 }

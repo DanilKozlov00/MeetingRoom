@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton jazzButton = findViewById(R.id.jazzBtn);
         ImageButton settingButton = findViewById(R.id.settingButton);
+        ImageButton refreshButton = findViewById(R.id.refresh);
 
         // Добавление начальных логов
         LogManager.getInstance().addLog("Версия Android: " + Build.VERSION.RELEASE);
@@ -63,7 +64,10 @@ public class MainActivity extends AppCompatActivity {
         displayLogs();
 
         // Очистка логов по кнопке
-        clearLogsButton.setOnClickListener(v -> logTextView.setText(""));
+        clearLogsButton.setOnClickListener(v -> {
+            logTextView.setText("");
+            LogManager.getInstance().clearLogs();
+        });
         refreshLogsButton.setOnClickListener(v -> displayLogs());
         //startApp.setOnClickListener(v -> launchApp());
 
@@ -74,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
                 settingLayout.setVisibility(LinearLayout.VISIBLE);
         });
         jazzButton.setOnClickListener(v -> launchApp());
-
+        TableLayout table = findViewById(R.id.BtnTable);
+        refreshButton.setOnClickListener(v -> reloadButtons(table));
 
         Intent serviceIntent = new Intent(this, BackgroundServerService.class);
         System.out.println(Build.VERSION.SDK_INT);
@@ -82,11 +87,16 @@ public class MainActivity extends AppCompatActivity {
             startForegroundService(serviceIntent);
         }
 
-        TableLayout table = findViewById(R.id.BtnTable);
+
         addButtons(table);
 
         STATIC_APP = this;
 
+    }
+
+    private void reloadButtons(TableLayout tl) {
+        tl.removeAllViews();
+        addButtons(tl);
     }
 
     // Метод для добавления логов
@@ -150,7 +160,11 @@ public class MainActivity extends AppCompatActivity {
         LogManager.getInstance().addLog("launch " + url);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
-        startActivity(intent);
+        try {
+            startActivity(intent);
+        }  catch (Throwable e){
+            LogManager.getInstance().addLog("Ошибка запуска активности:"+e.getMessage()+"\n"+url);
+        }
     }
 
 }
