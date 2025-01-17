@@ -4,6 +4,7 @@ package com.example.meetingroom;
 import static android.view.View.INVISIBLE;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -118,26 +119,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addButtons(TableLayout tl) {
-
-       ArrayList<Link> linkList = linkService.readLinks();
-        for (Link link: linkList) {
+        ArrayList<Link> linkList = linkService.readLinks();
+        for (Link link : linkList) {
             TableRow tr = new TableRow(this);
+
+            // Создаём кнопку
             Button btn = new Button(this);
-            btn.setText(link.getName());
+            btn.setText(link.getName()); // Устанавливаем текст кнопки
+
+            // Добавляем иконку слева от текста
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.jazz30);
+            if (drawable != null) {
+                // Устанавливаем размеры иконки
+                drawable.setBounds(0, 0, 60, 60);
+            }
+            btn.setCompoundDrawables(drawable, null, null, null); // Иконка слева
+            btn.setCompoundDrawablePadding(16); // Отступ между иконкой и текстом
+
+            // Устанавливаем слушатель для кнопки
             btn.setOnClickListener(l -> onBtnClick(link.getUrl()));
 
-//            btn.setCompoundDrawables(drawable, null,drawable,null);
-//            ImageView img = new ImageView(this);
-//            img.setImageDrawable(drawable);
+            // Стили кнопки (опционально)
+            btn.setPadding(16, 16, 16, 16); // Отступы внутри кнопки
+            btn.setBackgroundColor(Color.LTGRAY); // Фон кнопки
+            btn.setTextColor(Color.BLACK); // Цвет текста
 
-            Drawable drawable = ContextCompat.getDrawable(this,R.drawable.jazz30);
-            ImageButton imgBtn = new ImageButton(this);
-            imgBtn.setImageDrawable(drawable);
-            imgBtn.setOnClickListener(l -> onBtnClick(link.getUrl()));
+            // Настраиваем отступы между кнопками
+            TableRow.LayoutParams params = new TableRow.LayoutParams(
+                    TableRow.LayoutParams.WRAP_CONTENT,
+                    TableRow.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(16, 16, 16, 16); // Левый, верхний, правый, нижний отступы
+            btn.setLayoutParams(params);
 
-            tr.addView(imgBtn);
+            // Добавляем кнопку в строку и строку в таблицу
             tr.addView(btn);
-
             tl.addView(tr);
         }
     }
